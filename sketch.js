@@ -18,6 +18,8 @@ function setup() {
   dog.scale = 0.15;
 
   foodObj = new Food();
+  foodStock = database.ref('Food');
+  foodStock.on("value", readStock);
   feedPet = createButton("Feed the Dog");
   feedPet.position(700, 95);
   feedPet.mousePressed(feedDog);
@@ -31,6 +33,10 @@ function setup() {
 function draw() {
   background(46,139,87);
   foodObj.display();
+  fedTime = database.ref('FeedTime');
+  fedTime.on("value", function (data) {
+    lastFed = data.val();
+  })
 
   fill(255, 255, 254);
   textSize(15);
@@ -46,7 +52,8 @@ function draw() {
 }
 
 //function to read food Stock
-function readStock() {
+function readStock(data) {
+  foodS = data.val();
   foodObj.updateFoodStock(foodS);
 }
 
